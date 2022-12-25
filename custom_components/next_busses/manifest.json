@@ -12,6 +12,8 @@
 	],
 	"iot_class": "cloud_polling",
 	"version": "2022.12.24",
+	"dependencies": [],
+	"requirements": [],
 	"options_schema": {
 		"type": "object",
 		"properties": {

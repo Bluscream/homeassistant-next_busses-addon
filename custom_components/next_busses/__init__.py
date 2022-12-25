@@ -1,59 +1,52 @@
-"""The next_busses component."""
+"""The sems integration."""
+from __future__ import annotations
 
-import requests
-import voluptuous as vol
-# import homeassistant.components.frontend.html as html
+import asyncio
 
-# Define the schema for the options that the addon supports
-OPTIONS_SCHEMA = vol.Schema({
-    vol.Required("url"): str,
-})
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.const import CONF_URL
 
-ELEMENT_NAME = "transportation-data-card"
-ELEMENT_PATH = "custom_elements/next_busses.html"
+from .const import DOMAIN
+from .api import VRNAPI
 
-async def fetch_data(hass):
-    # Get the value of the "url" option
-    url = vol.get("url")
+# For your initial PR, limit it to 1 platform.
+PLATFORMS = ["sensor"]
 
-    # Fetch data from the URL
-    response = requests.get(url)
-    data = response.json()
 
-    # Keep track of the sensors that have been created
-    sensors = []
+async def async_setup(hass: HomeAssistant, config: dict):
+    """Set up the component."""
+    # Ensure our name space for storing objects is a known type. A dict is
+    # common/preferred as it allows a separate instance of your class for each
+    # instance that has been created in the UI.
+    hass.data.setdefault(DOMAIN, {})
 
-    # Iterate through the data and create a sensor for each item
-    for i, item in enumerate(data):
-        time = item["time"]
-        minutes = item["minutes"]
-        timespan = item["timespan"]
-        line = item["line"]
-        from_ = item["from"]
-        to = item["to"]
-        platform = item["platform"]
-
-        # Create a unique ID for the sensor based on the route information
-        sensor_id = f"next_bus_{i + 1}"
-
-        # Set the state of the sensor to the route information
-        hass.states.async_set(sensor_id, f"{time} ({minutes} minutes)")
-
-        # Add the sensor to the list of sensors
-        sensors.append(sensor_id)
-
-async def setup(hass, config):
-    # Validate the config options using the schema
-    config = OPTIONS_SCHEMA(config)
-
-    # Run the fetch_data function every hour
-    hass.helpers.event.async_track_time_interval(fetch_data, hass, minute=1)
-    
     return True
 
-async def stop(hass, config):
-    # Delete the sensors that were created when the addon was started
-    for sensor in sensors:
-        hass.states.async_remove(sensor)
-        
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up sems from a config entry."""
+    hass.data[DOMAIN][entry.entry_id] = VRNAPI(hass, entry.data[CONF_URL])
+
+    for platform in PLATFORMS:
+        hass.async_create_task(
+            hass.config_entries.async_forward_entry_setup(entry, platform)
+        )
+
     return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a config entry."""
+    unload_ok = all(
+        await asyncio.gather(
+            *[
+                hass.config_entries.async_forward_entry_unload(entry, platform)
+                for platform in PLATFORMS
+            ]
+        )
+    )
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
+
+    return unload_ok
