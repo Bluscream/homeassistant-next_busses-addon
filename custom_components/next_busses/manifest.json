@@ -8,6 +8,8 @@
 	"documentation": "https://github.com/Bluscream//homeassistant-next_busses",
 	"issue_tracker": "https://github.com/Bluscream/homeassistant-next_busses/issues",
 	"dependencies": [
+	],
+	"requirements": [
 		"requests",
 		"asyncio",
 		"aiohttp"
