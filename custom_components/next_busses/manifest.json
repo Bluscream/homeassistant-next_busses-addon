@@ -4,7 +4,7 @@
 	"name": "Next busses",
 	"description": "Fetches and displays data about public transportation routes",
 	"author": "Bluscream",
-	"url": "https://github.com/Bluscream//homeassistant-next_busses",
+	"url": "https://github.com/Bluscream/homeassistant-next_busses",
 	"documentation": "https://github.com/Bluscream//homeassistant-next_busses",
 	"issue_tracker": "https://github.com/Bluscream/homeassistant-next_busses/issues",
 	"dependencies": [
