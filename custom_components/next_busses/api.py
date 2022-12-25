@@ -10,7 +10,7 @@ _RequestTimeout = 30  # seconds
 # }
 class VRNAPI:
     """Interface to the API."""
-    def __init__(self, hass, url = "https://minopia.de/api/mvg/"):
+    def __init__(self, hass, url = "http://minopia.de/api/mvg/"):
         """Init dummy hub."""
         self._hass = hass
         self.base_url = url
