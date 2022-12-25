@@ -2,7 +2,7 @@
 
 import requests
 import voluptuous as vol
-import homeassistant.components.frontend.html as html
+# import homeassistant.components.frontend.html as html
 
 # Define the schema for the options that the addon supports
 OPTIONS_SCHEMA = vol.Schema({
@@ -48,8 +48,12 @@ async def setup(hass, config):
 
     # Run the fetch_data function every hour
     hass.helpers.event.async_track_time_interval(fetch_data, hass, minute=1)
+    
+    return True
 
 async def stop(hass, config):
     # Delete the sensors that were created when the addon was started
     for sensor in sensors:
         hass.states.async_remove(sensor)
+        
+    return True
