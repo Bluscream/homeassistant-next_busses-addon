@@ -1,0 +1,34 @@
+{
+	"domain": "next_busses",
+	"slug": "next_busses",
+	"name": "Next busses",
+	"description": "Fetches and displays data about public transportation routes",
+	"author": "Bluscream",
+	"url": "https://github.com/Bluscream//homeassistant-next_busses",
+	"documentation": "https://github.com/Bluscream//homeassistant-next_busses",
+	"issue_tracker": "https://github.com/Bluscream/homeassistant-next_busses/issues",
+	"dependencies": [
+		"requests",
+		"asyncio",
+		"aiohttp"
+	],
+	"codeowners": [
+		"@bluscream"
+	],
+	"iot_class": "cloud_polling",
+	"version": "2022.12.24",
+	"options_schema": {
+		"type": "object",
+		"properties": {
+			"url": {
+				"type": "string",
+				"title": "URL",
+				"description": "The URL from which to fetch data",
+				"default": "https://minopia.de/api/mvg/?stop=6032211&platforms=B,C,D&max=5"
+			}
+		},
+		"required": [
+			"url"
+		]
+	}
+}
