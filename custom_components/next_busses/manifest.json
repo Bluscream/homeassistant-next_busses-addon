@@ -7,6 +7,8 @@
 	"url": "https://github.com/Bluscream/homeassistant-next_busses",
 	"documentation": "https://github.com/Bluscream//homeassistant-next_busses",
 	"issue_tracker": "https://github.com/Bluscream/homeassistant-next_busses/issues",
+	"requirements": [
+	],
 	"codeowners": [
 		"@bluscream"
 	],
